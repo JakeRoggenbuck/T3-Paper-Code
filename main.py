@@ -7,6 +7,19 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
 )
 
+quantity = {
+    1: 10,
+    2: 10,
+    3: 10,
+    4: 10,
+    5: 10,
+    6: 10,
+    7: 10,
+    8: 10,
+    9: 10,
+    10: 10,
+}
+
 
 def find_thue_morse(lower=0, upper=1000, step=1):
     logging.warning(f"Started looking from {lower} to {upper} at a step of {step}")
@@ -21,7 +34,8 @@ def find_thue_morse(lower=0, upper=1000, step=1):
         if c:
             cur += 1
         else:
-            if cur > largest:
+            if quantity.get(cur, 0) > 0:
+                quantity[cur] -= 1
                 largest = cur
                 index = x
 
