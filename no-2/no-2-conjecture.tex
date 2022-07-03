@@ -1,0 +1,148 @@
+\documentclass[12pt]{article}
+
+\usepackage{listings}
+\usepackage{color}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=python, tabsize=4, frame=single, basicstyle=\ttfamily}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color
+  basicstyle=\footnotesize,        % size of fonts used for the code
+  breaklines=true,                 % automatic line breaking only at whitespace
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  keywordstyle=\color{blue},       % keyword style
+  stringstyle=\color{mymauve},     % string literal style
+}
+
+\title{ No-2 Conjecture }
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+The \textit{No-2 Conjecture} says that there is no consecutive sequence of ones with a size equal to two in the sequence $T_3$. In other words, no sequence of T translates to a sequence of $T_3$ that has exactly two consecutive ones.\\
+
+Note that this pattern of exactly two consecutive ones does exist in T, but not $T_3$.
+
+\begin{lemma}
+The smallest and only sequence that contains exactly two consecutive ones is 0110.
+\end{lemma}
+
+\begin{lemma}
+There exists no consecutive sequences of ones or zeros greater than two in T.
+
+E.g. 0110 and 1001 exist in T, but 1110 and 0100 do not.
+\end{lemma}
+
+\begin{theorem}
+Any sequences of T that leads to a sequence of $T_3$ that contains two consecutive ones must have ones in locations 3, and 6.
+
+E.g. . . . 1 . . 1 . . .
+\end{theorem}
+
+\begin{theorem}
+Any sequences of T that leads to a sequence of $T_3$ that contains two consecutive ones must also have zeros in locations 0, and 9.
+
+E.g. 0 . . 1 . . 1 . . 0
+\end{theorem}
+
+\begin{corollary}
+The only sequences that translate to a sequence of $T_3$ that are equal to 0110 that follow Lemma 1.2, Theorem 1.2, and Theorem 1.3 are the following. \\
+
+Possible T sequences that translates to $T_3$ equal to 0110 = ['0011001010',
+ '0011001100',
+ '0011011010',
+ '0101001010',
+ '0101001100',
+ '0101011010',
+ '0101101010',
+ '0101101100']
+
+\end{corollary}
+
+\begin{lemma} For any sequence of length at most $2^n$, if the Thue-Morse sequence doesn't contain it in the first $2^{n+3}$ digits, it contains it nowhere.
+\end{lemma}
+
+\begin{corollary}
+	None of the sequences from the list of possible T sequences that translates to $T_3$ equal to 0110 are contained in first $2 ^ {9 + 3} = 4096$ digits of T, and therefore exist nowhere in T.
+\end{corollary}
+
+
+\section{Code Verification}
+
+\subsection{Possible T sequences that translates to $T_3$ equal to 0110 not found in first 4096 of T}
+The first 4096 of T do not contain any of the 8 possible T sequences that translates to $T_3$ equal to 0110.\\
+
+\begin{lstlisting}[caption={Possible T sequences that translates to $T_3$ equal to 0110 not found in first 4096 of T}]
+first_4096 = ""
+
+for x in range(0, 4096):
+    first_4096 = "1" if bin(x).count('1') % 2 else "0"
+
+possible = [
+    '0011001010',
+    '0011001100',
+    '0011011010',
+    '0101001010',
+    '0101001100',
+    '0101011010',
+    '0101101010',
+    '0101101100',
+]
+
+for x in possible:
+    if x in first_4096:
+        print("Found")
+\end{lstlisting}
+
+\subsection{Find possible T sequences that translates to $T_3$ equal to 0110}
+\begin{lstlisting}[caption={Find possible T sequences that translates to $T_3$ equal to 0110}]
+import itertools
+from pprint import pprint
+
+perms = [''.join(x) for x in itertools.product('01', repeat=10)]
+
+def remove_less_than_two_in_a_row_t3(items: list[str]):
+    exactly_two = []
+    for x in items:
+        if x[3] == '1' and x[6] == '1':
+            exactly_two.append(x)
+
+    return exactly_two
+
+def remove_more_than_two_in_a_row_t3(items: list[str]):
+    exactly_two = []
+    for x in items:
+        t3 = ""
+        for a in range(0, 10, 3):
+            t3 += x[a]
+
+        if "111" not in t3:
+            exactly_two.append(x)
+
+    return exactly_two
+
+def remove_more_than_two_in_a_row_t_new(items: list[str]):
+    left = []
+    for item in items:
+        if "111" not in item and "000" not in item:
+            left.append(item)
+    return left
+
+perms = remove_more_than_two_in_a_row_t_new(perms)
+perms = remove_less_than_two_in_a_row_t3(perms)
+perms = remove_more_than_two_in_a_row_t3(perms)
+pprint(perms)
+\end{lstlisting}
+
+\end{document}

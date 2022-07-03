@@ -39,8 +39,3 @@ perms = remove_more_than_two_in_a_row_t_new(perms)
 perms = remove_less_than_two_in_a_row_t3(perms)
 perms = remove_more_than_two_in_a_row_t3(perms)
 pprint(perms)
-
-for perm in perms:
-    for a in range(0, 10, 3):
-        print(perm[a], end="")
-    print()
