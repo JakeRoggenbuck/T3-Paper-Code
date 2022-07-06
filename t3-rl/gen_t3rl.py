@@ -1,9 +1,8 @@
 import threading
-from tqdm import tqdm
 
 
 class T:
-    def __init__(self, max=1_000_000, step=1):
+    def __init__(self, max=100_000, step=1):
         self._max = max
         self.step = step
 
@@ -12,7 +11,7 @@ class T:
         return self
 
     def __next__(self):
-        if self.i >= self._max:
+        if self.i / self.step >= self._max:
             raise StopIteration
 
         x = self.i
@@ -31,12 +30,13 @@ def L(g, step):
             same_as_last += 1
         else:
             all += str(same_as_last)
+            all += ","
             same_as_last = 1
 
         last = x
         i += 1
 
-    with open(f"out_{step}.txt", "w") as file:
+    with open(f"./outs/out_{step}.txt", "w") as file:
         file.write(all)
 
 
