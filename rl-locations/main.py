@@ -1,8 +1,18 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 
-df = pd.read_csv("./data/data_counts_two_of_zeros.csv")
+data_counts_two_of_zeros = pd.read_csv("./data/data_counts_two_of_zeros.csv")
+data_counts_two_of_zeros.plot(x='x', y='y', kind='scatter', c="type", colormap='plasma')
+plt.savefig("data_counts_two_of_zeros.png")
 
-df.plot(x='x', y='y', kind='scatter', c="type", colormap='plasma')
+data_counts_two_of_ones = pd.read_csv("./data/data_counts_two_of_ones.csv")
+data_counts_two_of_ones.plot(x='x', y='y', kind='scatter', c="type", colormap='plasma')
+plt.savefig("data_counts_two_of_ones.png")
 
-plt.show()
+data_counts_two_of_zeros = pd.read_csv("./data2/data_counts_two_of_zeros.csv")
+data_counts_two_of_zeros.plot(x='x', y='y', kind='scatter', c="type", colormap='plasma')
+plt.savefig("data_counts_two_of_zeros_two.png")
+
+data_counts_two_of_ones = pd.read_csv("./data2/data_counts_two_of_ones.csv")
+data_counts_two_of_ones.plot(x='x', y='y', kind='scatter', c="type", colormap='plasma')
+plt.savefig("data_counts_two_of_ones_two.png")

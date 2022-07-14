@@ -49,7 +49,7 @@ fn main() {
     let mut file4 = std::fs::File::create("data_counts_two_of_zeros.csv").expect("create failed");
 
     let one_percent = limit / 100;
-    let mut count_percent = 0;
+    let mut count_percent = 0.0;
 
     let mut threes_as_1 = 0;
     let mut sixes_as_1 = 0;
@@ -61,7 +61,8 @@ fn main() {
     let mut sevens_as_0 = 0;
     let mut eights_as_0 = 0;
 
-    file1.write_all(format!("x,start,finish\n",).as_bytes())
+    file1
+        .write_all(format!("x,start,finish\n",).as_bytes())
         .expect("write failed");
 
     file2
@@ -77,7 +78,9 @@ fn main() {
         .expect("write failed");
 
     loop {
-        if count > count_percent * one_percent && count < (count_percent + 1) * one_percent {
+        if ((count as f32) > (count_percent as f32) * (one_percent as f32))
+            && (count as f32) < ((count_percent as f32) + 0.5) * (one_percent as f32)
+        {
             println!("{}% done.", count_percent);
 
             file3
@@ -122,7 +125,7 @@ fn main() {
             sevens_as_0 = 0;
             eights_as_0 = 0;
 
-            count_percent += 1;
+            count_percent += 0.5;
         }
 
         n = nth(count);
