@@ -43,10 +43,10 @@ fn main() {
     let mut count_ones = 1;
     let mut last = 1;
 
-    let mut file = std::fs::File::create("data_locations_of_ones.csv").expect("create failed");
+    let mut file1 = std::fs::File::create("data_locations_of_ones.csv").expect("create failed");
     let mut file2 = std::fs::File::create("data_locations_of_zeros.csv").expect("create failed");
-    let mut file3 = std::fs::File::create("data_counts_of_ones.csv").expect("create failed");
-    let mut file4 = std::fs::File::create("data_counts_of_zeros.csv").expect("create failed");
+    let mut file3 = std::fs::File::create("data_counts_two_of_ones.csv").expect("create failed");
+    let mut file4 = std::fs::File::create("data_counts_two_of_zeros.csv").expect("create failed");
 
     let one_percent = limit / 100;
     let mut count_percent = 0;
@@ -61,7 +61,7 @@ fn main() {
     let mut sevens_as_0 = 0;
     let mut eights_as_0 = 0;
 
-    file.write_all(format!("x,start,finish\n",).as_bytes())
+    file1.write_all(format!("x,start,finish\n",).as_bytes())
         .expect("write failed");
 
     file2
@@ -69,11 +69,11 @@ fn main() {
         .expect("write failed");
 
     file3
-        .write_all(format!("x,3s,6s,7s,8s\n",).as_bytes())
+        .write_all(format!("x,y,type\n",).as_bytes())
         .expect("write failed");
 
     file4
-        .write_all(format!("x,3s,6s,7s,8s\n",).as_bytes())
+        .write_all(format!("x,y,type\n",).as_bytes())
         .expect("write failed");
 
     loop {
@@ -81,17 +81,19 @@ fn main() {
             println!("{}% done.", count_percent);
 
             file3
-                .write_all(
-                    format!(
-                        "{},{},{},{},{}\n",
-                        count / 3,
-                        threes_as_1,
-                        sixes_as_1,
-                        sevens_as_1,
-                        eights_as_1
-                    )
-                    .as_bytes(),
-                )
+                .write_all(format!("{},{},3\n", count / 3, threes_as_1).as_bytes())
+                .expect("write failed");
+
+            file3
+                .write_all(format!("{},{},6\n", count / 3, sixes_as_1).as_bytes())
+                .expect("write failed");
+
+            file3
+                .write_all(format!("{},{},7\n", count / 3, sevens_as_1).as_bytes())
+                .expect("write failed");
+
+            file3
+                .write_all(format!("{},{},8\n", count / 3, eights_as_1).as_bytes())
                 .expect("write failed");
 
             threes_as_1 = 0;
@@ -100,17 +102,19 @@ fn main() {
             eights_as_1 = 0;
 
             file4
-                .write_all(
-                    format!(
-                        "{},{},{},{},{}\n",
-                        count / 3,
-                        threes_as_0,
-                        sixes_as_0,
-                        sevens_as_0,
-                        eights_as_0
-                    )
-                    .as_bytes(),
-                )
+                .write_all(format!("{},{},3\n", count / 3, threes_as_0).as_bytes())
+                .expect("write failed");
+
+            file4
+                .write_all(format!("{},{},6\n", count / 3, sixes_as_0).as_bytes())
+                .expect("write failed");
+
+            file4
+                .write_all(format!("{},{},7\n", count / 3, sevens_as_0).as_bytes())
+                .expect("write failed");
+
+            file4
+                .write_all(format!("{},{},8\n", count / 3, eights_as_0).as_bytes())
                 .expect("write failed");
 
             threes_as_0 = 0;
@@ -138,7 +142,7 @@ fn main() {
                         }
                     }
 
-                    file3
+                    file1
                         .write_all(
                             format!(
                                 "{},{},{}\n",
@@ -157,17 +161,17 @@ fn main() {
                 count_zeros += 1;
             } else {
                 if count_zeros > 1 {
-                    match count_ones {
+                    match count_zeros {
                         3 => threes_as_0 += 1,
                         6 => sixes_as_0 += 1,
                         7 => sevens_as_0 += 1,
                         8 => eights_as_0 += 1,
                         _ => {
-                            println!("{} at {} Hmm?", count_ones, count / 3)
+                            println!("{} at {} Hmm?", count_zeros, count / 3)
                         }
                     }
 
-                    file4
+                    file2
                         .write_all(
                             format!(
                                 "{},{},{}\n",
