@@ -31,6 +31,10 @@ fn nth(n: i64) -> i8 {
 }
 
 fn main() {
+    let mut line = String::new();
+    println!("Ready? ");
+    std::io::stdin().read_line(&mut line).unwrap();
+
     let limit = 100_000_000;
     let mut count = 0;
     let mut n: i8;
@@ -39,15 +43,81 @@ fn main() {
     let mut count_ones = 1;
     let mut last = 1;
 
-    let mut file = std::fs::File::create("data.csv").expect("create failed");
+    let mut file = std::fs::File::create("data_locations_of_ones.csv").expect("create failed");
+    let mut file2 = std::fs::File::create("data_locations_of_zeros.csv").expect("create failed");
+    let mut file3 = std::fs::File::create("data_counts_of_ones.csv").expect("create failed");
+    let mut file4 = std::fs::File::create("data_counts_of_zeros.csv").expect("create failed");
 
     let one_percent = limit / 100;
     let mut count_percent = 0;
 
-    loop {
+    let mut threes_as_1 = 0;
+    let mut sixes_as_1 = 0;
+    let mut sevens_as_1 = 0;
+    let mut eights_as_1 = 0;
 
-        if count > count_percent * one_percent && count < (count_percent + 1) * one_percent{
+    let mut threes_as_0 = 0;
+    let mut sixes_as_0 = 0;
+    let mut sevens_as_0 = 0;
+    let mut eights_as_0 = 0;
+
+    file.write_all(format!("x,start,finish\n",).as_bytes())
+        .expect("write failed");
+
+    file2
+        .write_all(format!("x,start,finish\n",).as_bytes())
+        .expect("write failed");
+
+    file3
+        .write_all(format!("x,3s,6s,7s,8s\n",).as_bytes())
+        .expect("write failed");
+
+    file4
+        .write_all(format!("x,3s,6s,7s,8s\n",).as_bytes())
+        .expect("write failed");
+
+    loop {
+        if count > count_percent * one_percent && count < (count_percent + 1) * one_percent {
             println!("{}% done.", count_percent);
+
+            file3
+                .write_all(
+                    format!(
+                        "{},{},{},{},{}\n",
+                        count / 3,
+                        threes_as_1,
+                        sixes_as_1,
+                        sevens_as_1,
+                        eights_as_1
+                    )
+                    .as_bytes(),
+                )
+                .expect("write failed");
+
+            threes_as_1 = 0;
+            sixes_as_1 = 0;
+            sevens_as_1 = 0;
+            eights_as_1 = 0;
+
+            file4
+                .write_all(
+                    format!(
+                        "{},{},{},{},{}\n",
+                        count / 3,
+                        threes_as_0,
+                        sixes_as_0,
+                        sevens_as_0,
+                        eights_as_0
+                    )
+                    .as_bytes(),
+                )
+                .expect("write failed");
+
+            threes_as_0 = 0;
+            sixes_as_0 = 0;
+            sevens_as_0 = 0;
+            eights_as_0 = 0;
+
             count_percent += 1;
         }
 
@@ -58,16 +128,27 @@ fn main() {
                 count_ones += 1;
             } else {
                 if count_ones > 1 {
-                    file.write_all(
-                        format!(
-                            "{},{},{}\n",
-                            count_ones,
-                            count / 3,
-                            (count / 3) + count_ones
+                    match count_ones {
+                        3 => threes_as_1 += 1,
+                        6 => sixes_as_1 += 1,
+                        7 => sevens_as_1 += 1,
+                        8 => eights_as_1 += 1,
+                        _ => {
+                            println!("{} at {} Hmm?", count_ones, count / 3)
+                        }
+                    }
+
+                    file3
+                        .write_all(
+                            format!(
+                                "{},{},{}\n",
+                                count_ones,
+                                count / 3,
+                                (count / 3) + count_ones
+                            )
+                            .as_bytes(),
                         )
-                        .as_bytes(),
-                    )
-                    .expect("write failed");
+                        .expect("write failed");
                 }
                 count_ones = 1;
             }
@@ -76,16 +157,27 @@ fn main() {
                 count_zeros += 1;
             } else {
                 if count_zeros > 1 {
-                    file.write_all(
-                        format!(
-                            "{},{},{}\n",
-                            count_zeros,
-                            count / 3,
-                            (count / 3) + count_zeros
+                    match count_ones {
+                        3 => threes_as_0 += 1,
+                        6 => sixes_as_0 += 1,
+                        7 => sevens_as_0 += 1,
+                        8 => eights_as_0 += 1,
+                        _ => {
+                            println!("{} at {} Hmm?", count_ones, count / 3)
+                        }
+                    }
+
+                    file4
+                        .write_all(
+                            format!(
+                                "{},{},{}\n",
+                                count_zeros,
+                                count / 3,
+                                (count / 3) + count_zeros
+                            )
+                            .as_bytes(),
                         )
-                        .as_bytes(),
-                    )
-                    .expect("write failed");
+                        .expect("write failed");
                 }
                 count_zeros = 1;
             }
