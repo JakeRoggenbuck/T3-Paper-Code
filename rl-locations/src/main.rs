@@ -1,5 +1,4 @@
-use std::error::Error;
-use csv::Writer;
+use std::io::Write;
 
 fn nth_full_iter(n: i64) -> String {
     let mut s = String::from("0");
@@ -32,7 +31,7 @@ fn nth(n: i64) -> i8 {
 }
 
 fn main() {
-    let limit = 1000;
+    let limit = 100_000_000;
     let mut count = 0;
     let mut n: i8;
 
@@ -40,7 +39,18 @@ fn main() {
     let mut count_ones = 1;
     let mut last = 1;
 
+    let mut file = std::fs::File::create("data.csv").expect("create failed");
+
+    let one_percent = limit / 100;
+    let mut count_percent = 0;
+
     loop {
+
+        if count > count_percent * one_percent && count < (count_percent + 1) * one_percent{
+            println!("{}% done.", count_percent);
+            count_percent += 1;
+        }
+
         n = nth(count);
 
         if n == 1 {
@@ -48,7 +58,16 @@ fn main() {
                 count_ones += 1;
             } else {
                 if count_ones > 1 {
-                    println!("{},{},{}", count_ones, count / 3, (count / 3) + count_ones);
+                    file.write_all(
+                        format!(
+                            "{},{},{}\n",
+                            count_ones,
+                            count / 3,
+                            (count / 3) + count_ones
+                        )
+                        .as_bytes(),
+                    )
+                    .expect("write failed");
                 }
                 count_ones = 1;
             }
@@ -57,7 +76,16 @@ fn main() {
                 count_zeros += 1;
             } else {
                 if count_zeros > 1 {
-                    println!("{},{},{}", count_zeros, count / 3, (count / 3) + count_zeros);
+                    file.write_all(
+                        format!(
+                            "{},{},{}\n",
+                            count_zeros,
+                            count / 3,
+                            (count / 3) + count_zeros
+                        )
+                        .as_bytes(),
+                    )
+                    .expect("write failed");
                 }
                 count_zeros = 1;
             }
