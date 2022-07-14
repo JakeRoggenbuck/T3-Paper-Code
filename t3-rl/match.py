@@ -26,7 +26,6 @@ for ref_key, ref_value in first_bits.items():
     else:
         sames[ref_key] = {"val": ref_value, "sames": []}
 
-
 new_out = {}
 
 for k, v in sames.items():
