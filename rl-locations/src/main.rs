@@ -35,7 +35,7 @@ fn main() {
     println!("Ready? ");
     std::io::stdin().read_line(&mut line).unwrap();
 
-    let limit = 100_000_000;
+    let limit = 10_000_000_000;
     let mut count = 0;
     let mut n: i8;
 
