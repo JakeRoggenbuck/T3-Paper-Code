@@ -1,7 +1,7 @@
 use std::io::Write;
 
 const TN: i64 = 3;
-const MAX: i64 = 100_000_000;
+const MAX: i64 = 10_000_000_00;
 
 fn nth(n: i64) -> i8 {
     let mut count = 0;
@@ -30,14 +30,21 @@ fn main() {
     let mut loc_of_zeros =
         std::fs::File::create("data_locations_of_zeros.csv").expect("create failed");
 
+    let mut loc_of_anoms =
+        std::fs::File::create("data_locations_of_anomalies.csv").expect("create failed");
+
     let mut last_count: i64 = -1;
 
     loc_of_ones
-        .write_all(format!("count,loc\n").as_bytes())
+        .write_all(format!("count,loc_in_t\n").as_bytes())
         .expect("write failed");
 
     loc_of_zeros
-        .write_all(format!("count,loc\n").as_bytes())
+        .write_all(format!("count,loc_in_t\n").as_bytes())
+        .expect("write failed");
+
+    loc_of_anoms
+        .write_all(format!("anom_percent,loc_in_t\n").as_bytes())
         .expect("write failed");
 
     let mut file: &std::fs::File;
@@ -57,7 +64,16 @@ fn main() {
             println!("{percents_done}%");
             println!("Iterated {tn_location} times over T{TN}");
             println!("First {t_location} of T");
-            println!("6,8 anomaly percent {} ", anom_count as f64 / tn_location as f64);
+            println!(
+                "6,8 anomaly percent {} ",
+                anom_count as f64 / tn_location as f64
+            );
+
+            loc_of_anoms
+                .write_all(
+                    format!("{},{t_location}\n", anom_count as f64 / tn_location as f64).as_bytes(),
+                )
+                .expect("write failed");
         }
 
         x = nth(t_location);
@@ -113,5 +129,8 @@ fn main() {
     print!("\x1b[1A\x1b[2K");
     println!("Iterated {tn_location} times over T{TN}");
     println!("First {t_location} of T");
-    println!("6,8 anomaly percent {} ", anom_count as f64 / tn_location as f64);
+    println!(
+        "6,8 anomaly percent {} ",
+        anom_count as f64 / tn_location as f64
+    );
 }
