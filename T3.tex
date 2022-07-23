@@ -6,13 +6,35 @@
 \author{Adam Hutchings, Jake Roggenbuck}
 \maketitle
 
+\begin{abstract}
+We investigate some interesting properties of the sequence made up of every third term of the Thue-Morse sequence.
+\end{abstract}
+
+\tableofcontents
+
 \section{Introduction}
 The Thue-Morse sequence can be defined in many ways, but it is the sequence whose $n$th term ($T(n)$) depends on the number of ones in the binary representation of $n:$ 1 if odd, 0 if even. The sequence $T_3,$ which is defined as the sequence whose $n$th term is $T(3n),$ has some interesting properties that we will investigate -- among the most interesting of which are the persistent imbalance of zeros and ones and the lengths of runs in the sequence.
 
-\section{No-2 Theorem}
-We define a $motif$ in $T_3$ to be a sequence of the same digit not contained inside any larger motif. The authors observed that for the first $10^{11}$ terms of $T_3,$ there are no motifs of length 2, which can be proven formally.
+\section{Run-Length Of $T_3$}
+
+\subsection{Motifs and the $\Lambda$ Function}
+We define a $motif$ in $T_3$ to be a sequence of the same digit not contained inside any larger sequence made up of entirely the same digit. Similar to the computer science notion of \emph{run-length encoding}, we define a function $\Lambda$ acting on a sequence $x,$ whose $n$th member is called $\Lambda(x)(n),$ as follows:
+
+- $\Lambda(x)(0)$ is the length of the motif in $x$ starting at $x_0$.
+
+- $\Lambda(x)(n)$ is the length of the motif starting at $\sum_{k=0}^{n-1} \Lambda(x)(k).$
+
+In other words, $\Lambda$ takes as input a sequence of numbers and transforms it into a sequence denoting the lengths of motifs in the input. We further define $\Lambda_n(x)$ as $\Lambda(\Lambda_{n-1}(x)),$ and abbreviate $\Lambda_1$ to $\Lambda$.
+
+\subsection{$\Lambda(T_3)$}
+
+The authors created a computer program to investigate the sequence $\Lambda(T_3)$ and noted that it consists, for all values checked, of only 1, 3, 6, 7, and 8. In other words, motifs in $T_3$ consist of only these values.
+
+\subsection{No-2 Theorem}
 
 \textbf{No-2 Theorem} There are no motifs of length $2$ in $T_3.$
+\newline
+\textbf{Alternative Statement of the No-2 Theorem} $\Lambda(T_3)$ contains no $2$s.
 
 \textbf{Proof}
 We begin by observing that a motif of zeros of length 2 is the sequence $00$ surrounded by $1$s, and a motif of ones of length 2 is the opposite. These translate to $1001$ and $0110$ in $T_3,$ which must exist if the No-2 Theorem is false. Because we obtain the elements of $T_3$ from choosing every third element of the Thue-Morse sequence, the existence of $1001$ or $0110$ in $T_3$ implies the existence of $1XX0XX0XX1$ or $0XX1XX1XX0$ in the Thue-Morse sequence where $X$ is either digit.
@@ -33,7 +55,18 @@ Lemma 2.1 allowed for us to create a computer program to comb through all ten-di
 
 \textbf{Proof} Call the first $n$ digits of the Thue-Morse sequence $A$, and $\overline{A}$ (as defined above) $B.$ Then by the same logic as the proof of Lemma 2.2, the first $8n$ digits are $ABBABAAB.$ As the sequence $n$ is no more than $n$ digits long, any occurrence of it is either entirely within one $n$-long block or straddling two. Therefore, the only possible "environments" in which the pattern may occur are $A,$ $B,$ $AA,$ $AB,$ $BA,$ or $BB.$ All of these environments occur in $ABBABAAB,$ so if the pattern never exists there, it never exists anywhere. $\Box$
 
-Now, Lemma 2.3 means we only need to check the first 128 digits (as the 10-digit sequences are less than 16 long, so checking 128 is sufficient.) Checking using a simple computer program rules these out. $\Box$
+Now, Lemma 2.3 means we only need to check the first 128 digits (as the 10-digit sequences are less than 16 long, so checking 128 is sufficient.) Checking using a simple computer program has ruled these out. $\Box$
+
+\subsection{No-9+ Conjecture}
+The authors observed that for the first $10^{10}$ terms of T3, there are not motifs of lengths 9 or greater, which can be proven formally.
+
+\textbf{No-9+ Theorem} There are no motifs of length $9$ or greater in $T_3$.
+
+\subsection{6,8 Synchronization Conjecture}
+The authors observed that the runlengths of 1s of $T_3$ or $\Lambda{_1(T_3)}$ have a pattern in the order of 6s and 8s. It appears that 6 always follow 8 and vice versa however, there is a caveat. In $\Lambda{_1(T_3)}$, 6 does in fact follow 8 and vice versa until the location 87384 (\textbf{T OR T3?}) where there is an anomaly of a 6 following another 6. We have found by observation that frequency of anomalies stays between $0.019\%$ and $0.028\%$ from $10^7$ to $10^9$ in the digits of $\Lambda{_1(T_3)}$. The frequency of anomaly increases from the location 87384 forever.
+
+\subsection{Uniform 3s Conjecture}
+The frequency of values in $\Lambda{_1(T_3)}$ is uniform.
 
 \section{The Imbalance Of Zeros And Ones}
 
@@ -124,7 +157,6 @@ This means that we can show $\alpha_0(k) > \alpha_1(k)$ for $k = 5, 6$ and be do
 $$\alpha_0(5) = 10, \alpha_1(5) = 1, \alpha_0(6) = 20, \alpha_1(6) = 2.$$
 
 This completes the proof.
-
 
 \section{No-9+ Conjecture}
 The authors observed that for the first $10^{10}$ terms of T3, there are not motifs of lengths 9 or greater, which can be proven formally.
