@@ -1,9 +1,20 @@
 \documentclass{article}
 \usepackage{amsmath, amssymb}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
 \begin{document}
 
 \title{Exploring the Thue-Morse sequence}
-\author{Adam Hutchings, Jake Roggenbuck}
+\author{
+	Adam Hutchings
+	\and
+	Henry Hutchings
+	\and
+	Jake Roggenbuck
+}
 \maketitle
 
 \begin{abstract}
@@ -18,13 +29,25 @@ The Thue-Morse sequence can be defined in many ways, but it is the sequence whos
 \section{Run-Length Of $T_3$}
 
 \subsection{Motifs and the $\Lambda$ Function}
-We define a $motif$ in $T_3$ to be a sequence of the same digit not contained inside any larger sequence made up of entirely the same digit. Similar to the computer science notion of \emph{run-length encoding}, we define a function $\Lambda$ acting on a sequence $x,$ whose $n$th member is called $\Lambda(x)(n),$ as follows:
+We define $runs$ and $motifs$ in $T_3$ as follows:
+
+\begin{definition}
+\label{run}
+A \emph{run} of length $n$ is $n$ consecutive terms which are all identical.
+\end{definition}
+
+\begin{definition}
+\label{motif}
+A \emph{motif} of length $n$ is a run of length $n$ which is not contained inside a run of length $m > n.$
+\end{definition}
+
+Similar to the computer science notion of \emph{run-length encoding}, we define a function $\Lambda$ acting on a sequence $x,$ whose $n$th member is called $\Lambda(x)(n),$ as follows:
 
 - $\Lambda(x)(0)$ is the length of the motif in $x$ starting at $x_0$.
 
 - $\Lambda(x)(n)$ is the length of the motif starting at $\sum_{k=0}^{n-1} \Lambda(x)(k).$
 
-In other words, $\Lambda$ takes as input a sequence of numbers and transforms it into a sequence denoting the lengths of motifs in the input. We further define $\Lambda_n(x)$ as $\Lambda(\Lambda_{n-1}(x)),$ and abbreviate $\Lambda_1$ to $\Lambda$.
+In other words, $\Lambda$ takes as input a sequence of numbers and transforms it into a sequence denoting the lengths of motifs in the input.
 
 \subsection{$\Lambda(T_3)$}
 
@@ -32,35 +55,345 @@ The authors created a computer program to investigate the sequence $\Lambda(T_3)
 
 \subsection{No-2 Theorem}
 
-\textbf{No-2 Theorem} There are no motifs of length $2$ in $T_3.$
-\newline
-\textbf{Alternative Statement of the No-2 Theorem} $\Lambda(T_3)$ contains no $2$s.
+\begin{theorem}[No-2 Theorem]
+There are no motifs of length $2$ in $T_3.$ Equivalently, $\Lambda(T_3)$ contains no $2$s.
+\end{theorem}
 
 \textbf{Proof}
 We begin by observing that a motif of zeros of length 2 is the sequence $00$ surrounded by $1$s, and a motif of ones of length 2 is the opposite. These translate to $1001$ and $0110$ in $T_3,$ which must exist if the No-2 Theorem is false. Because we obtain the elements of $T_3$ from choosing every third element of the Thue-Morse sequence, the existence of $1001$ or $0110$ in $T_3$ implies the existence of $1XX0XX0XX1$ or $0XX1XX1XX0$ in the Thue-Morse sequence where $X$ is either digit.
 
-\textbf{Lemma 2.1} The sequences $000$ and $111$ do not exist in the Thue-Morse sequence.
+\begin{lemma}
+\label{triplet}
+The sequences $000$ and $111$ do not exist in the Thue-Morse sequence.
+\end{lemma}
 
 \textbf{Proof} The non-existence of repetitions of three in the sequence is a well-known fact, but may be established as follows: jumping from $2n$ to $2n+1$ changes a $0$ to a $1$ and nothing else, which means that $T_{2n}$ and $T_{2n+1}$ are opposite. Therefore, the entire Thue-Morse sequence consists of repetitions of $01$ and $10,$ which allows for no $000$ or $111.$ $\Box$
 
-Lemma 2.1 allowed for us to create a computer program to comb through all ten-digit sequences of zeros and ones, with the constraints that they follow the pattern $0XX1XX1XX0$ and do not contain $000$ or $111.$  The only ten-digit sequences that satisfy these constraints are $0011001010,$ $0011001100,$ $0011011010,$$0101001010,$ $0101001100,$ $0101011010,$ $0101101010,$ and $0101101100.$ We do not check for any occurrences of $1001$ in $T_3,$ (which would follow the pattern $1XX0XX0XX1$ in $T$) but this is not necessary, as shown by:
+Lemma \ref{triplet} allowed for us to create a computer program to comb through all ten-digit sequences of zeros and ones, with the constraints that they follow the pattern $0XX1XX1XX0$ and do not contain $000$ or $111.$  The only ten-digit sequences that satisfy these constraints are $0011001010,$ $0011001100,$ $0011011010,$$0101001010,$ $0101001100,$ $0101011010,$ $0101101010,$ and $0101101100.$ We do not check for any occurrences of $1001$ in $T_3,$ (which would follow the pattern $1XX0XX0XX1$ in $T$) but this is not necessary, as shown by:
 
-\textbf{Lemma 2.2} A sequence $X$ exists in the Thue-Morse sequence \emph{iff} the sequence $\overline{X}$ also exists, where $\overline{X}$ is $X$ with $0$ and $1$ interchanged.
+\begin{lemma}
+\label{xiffxbar}
+A sequence $X$ exists in the Thue-Morse sequence \emph{iff} the sequence $\overline{X}$ also exists, where $\overline{X}$ is $X$ with $0$ and $1$ interchanged.
+\end{lemma}
 
 \textbf{Proof} Such a sequence $X$ will occur entirely inside the first $n$ digits of the sequence, where $n$ is an arbitrarily large power of 2. The \emph{next} $n$ digits are the same as the first $n$ with $0$ and $1$ interchanged, so the existence of $X$ in the first block is equivalent to the existence of $\overline{X}$ in the second. $\Box$
 
 (This means that we do not need to check for any occurrences in $1001$ because these exist \emph{iff} occurrences of $0110$ occur.)
 
-\textbf{Lemma 2.3} If $n$ is some power of 2 and the sequence $X$ is not more than $n$ digits long, then if $X$ does not occur in the first $8n$ digits of the Thue-Morse sequence, it never occurs.
+\begin{lemma}
+\label{recurrence}
+If $n$ is some power of 2 and the sequence $X$ is not more than $n$ digits long, then if $X$ does not occur in the first $8n$ digits of the Thue-Morse sequence, it never occurs.
+\end{lemma}
 
 \textbf{Proof} Call the first $n$ digits of the Thue-Morse sequence $A$, and $\overline{A}$ (as defined above) $B.$ Then by the same logic as the proof of Lemma 2.2, the first $8n$ digits are $ABBABAAB.$ As the sequence $n$ is no more than $n$ digits long, any occurrence of it is either entirely within one $n$-long block or straddling two. Therefore, the only possible "environments" in which the pattern may occur are $A,$ $B,$ $AA,$ $AB,$ $BA,$ or $BB.$ All of these environments occur in $ABBABAAB,$ so if the pattern never exists there, it never exists anywhere. $\Box$
 
 Now, Lemma 2.3 means we only need to check the first 128 digits (as the 10-digit sequences are less than 16 long, so checking 128 is sufficient.) Checking using a simple computer program has ruled these out. $\Box$
 
-\subsection{No-9+ Conjecture}
-The authors observed that for the first $10^{10}$ terms of T3, there are not motifs of lengths 9 or greater, which can be proven formally.
+\subsection{The $\phi$-$\rho$ method}
 
-\textbf{No-9+ Theorem} There are no motifs of length $9$ or greater in $T_3$.
+Brute-forcing the No-2 Theorem did leave us with some useful tools to tackle future proofs, but the time taken to brute-force a proof will grow exponentially with the length of the sequence to check for. We must develop a better way. The $\phi$-$\rho$ method will reduce checking a sequence of length $x$ to checking for four sequences of length $y$ such that $3x/4 < y < x.$
+
+We see that the sequence $T_3$ is made up of blocks of 4, for every multiple of 4 $n,$ of $T_3(n), T_3(n+1), T_3(n+2), T_3(n+3),$ which is equal to:
+
+$$T(3n), T(3n+3), T(3n+6), T(3n+9).$$
+
+Recall that the value $T(x)$ is computed using the number of ones in the binary expansion of $x:$ an even number if $T(x) = 0,$ and an odd number is $T(x) = 1.$ Remembering that $n$ is a multiple of 4, we will denote $3n/4$ by $m,$ and denote the binary expansion of any number $x$ by $[x].$ In that case, we have the following binary expansions of the four numbers above:
+
+$$[3n] = [m]00,$$
+$$[3n + 3] = [m]11,$$
+$$[3n + 6] = [m+1]10,$$
+$$[3n + 9] = [m+2]01.$$
+
+Therefore, we know their values in the Thue-Morse sequence.
+
+$$T(3n) = T(m),$$
+$$T(3n + 3) = T(m),$$
+$$T(3n + 6) \neq T(m+1),$$
+$$T(3n + 9) \neq T(m+2).$$
+
+This sequence of four values is equivalent to $T_3(n), T_3(n+1), T_3(n+2), T_3(n+3)$ by the definition of the $T_3$ sequence. Knowing that $n$ is a multiple of 4, then, and therefore that $m$ is a multiple of 3, we see that the $T_3$ sequence is made up of blocks of length 4 for every multiple of 3 $m.$ Denoting the binary complement of $x$ by $\overline{x},$ these blocks go:
+
+$$T(m), T(m), \overline{T(m+1)}, \overline{T(m+2)}.$$
+
+Because this sequence in $T_3$ repeats every four with a new $m,$ for any sequence $X$ we wish to check, we need only match each element in X to the corresponding entries in the infinite sequence
+
+$$T(m), T(m), \overline{T(m+1)}, \overline{T(m+2)}, T(m+3), T(m+3), \overline{T(m+4)}, \overline{T(m+5)}, \cdots$$
+
+starting at each of the first four entries. Removing the overlines and duplicate entries then gives us four sequences in $T$ to check, each of which are at most as long as $X.$
+
+For example, we can now prove the No-2 Theorem without resorting to brute-forcing. Remembering that the No-2 Theorem implies the existence of $0, 1, 1, 0$ or $1, 0, 0, 1$ in $T_3,$ we can reason about where these sequences must appear. Because $T_3(4n) = T_3(4n + 1)$ for all natural numbers $n,$ we can eliminate any possibility where the first two digits \textbf{01}10 \textbf{10}01 or the last two digits 01\textbf{10} 10\textbf{01} are at positions $4n, 4n+1.$ Therefore, any $0110$ or $1001$ sequence would have to begin at position $4n+1$ or $4n+3.$ We can make a table for each of the two possibilities, where the first two rows are the direct values in $0110$ and $1001$ and the last two rows contain the sequence in $T$ we wish to look for. In fact, due to Lemma \ref{xiffxbar}, we need only look for $0110.$
+
+Case 1 ($4n+1$):
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+ \hline
+ &&&\\
+$T(m)$ & $\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ \\ 
+0 & 1 & 1 & 0 \\
+\hline
+&&&\\
+$T(m)$ & $T(m+1)$ & $T(m+2)$ & $T(m+3)$ \\
+0 & 0 & 0 & 0 \\
+ \hline
+\end{tabular}
+\end{center}
+
+Case 3 ($4n+3$):
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+ \hline
+ &&&\\
+$\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ \\ 
+0 & 1 & 1 & 0 \\
+\hline
+&&&\\
+$T(m+2)$ & $T(m+3)$ & & $T(m+4)$ \\
+1 & 1 &  & 1 \\
+ \hline
+\end{tabular}
+\end{center}
+
+In either case, we have three consecutive entries of the same value in the Thue-Morse sequence, which as per Lemma \ref{triplet} never exists. Therefore, No-2 is proven again. $\Box$
+
+\subsection{No-4, No-5, and No-9+}
+
+\begin{theorem}
+Motifs in $T_3$ may only be of lengths 1, 3, 6, 7, or 8.
+\end{theorem}
+
+To prove this, we need to prove that no other motifs exist. No-2 has been proven, so we will break this into three parts: proving that no motifs of length 4 exist, proving that none of length 5 exist, and proving that none of length 9 or greater exist.
+
+\subsubsection{No-4}
+
+\begin{theorem}[No-4 Theorem]
+There are no motifs of length 4.
+\end{theorem}
+
+\textbf{Proof} A counterexample, a motif of length 4, will follow the pattern $011110$ or $100001.$ As we established in the No-2 Theorem proof above, we need only check the first example: $011110.$ For Case 1 (starting at 0 \emph{mod} 4):
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+ \hline
+ &&&&&\\
+$T(m)$ & $T(m)$ & $\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ \\ 
+0 & 1 & 1 & 1 & 1 & 0 \\
+\hline
+&&&&&\\
+$T(m)$ & $T(m)$ & $T(m+1)$ & $T(m+2)$ & $T(m+3)$ & $T(m+3)$ \\
+0 & 1 & 0 & 0 & 1 & 0 \\
+ \hline
+\end{tabular}
+\end{center}
+
+A contradiction is immediately apparent: $T(m)$ may not equal both $0$ and $1,$ so Case 1 is ruled out.
+
+- Case 2 has the sequence starting at 1 \emph{mod} 4:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+ \hline
+ &&&&&\\
+$T(m)$ & $\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ \\ 
+0 & 1 & 1 & 1 & 1 & 0 \\
+\hline
+&&&&&\\
+$T(m)$ & $T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & T(m+4) \\
+0 & 0 & 0 & 1 & & 1 \\
+ \hline
+\end{tabular}
+\end{center}
+
+A sequence of $000$ (which starts at $T(m)$) is disallowed in Thue-Morse, so Case 2 is also ruled out.
+
+Case 3:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+ \hline
+ &&&&&\\
+$\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ \\ 
+0 & 1 & 1 & 1 & 1 & 0 \\
+\hline
+&&&&&\\
+$T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & T(m+4) & T(m+5) \\
+1 & 0 & 1 & & 0 & 1 \\
+ \hline
+\end{tabular}
+\end{center}
+
+Such a subsequence is also impossible. Recall that the Thue-Morse sequence is composed of two repeating blocks of length $2^k,$ which are opposites of each other. For $k = 1,$ these two sequences are $01$ and $10.$ So there are two cases.
+
+- Sub-case 1
+The arbitrary $m$ we chose is even. Therefore, the sequence starting at position $m$ of $10101$ may be bracketed into blocks of $01$ and $10$ as $[10][10][1.$ This third block must be finished by a $0,$ so we see that we will have a sequence of $[10][10][10].$
+
+- Sub-case 2
+If $m$ is odd, the sequence is instead $1][01][01].$ This is completed to be $[01][01][01].$
+
+Now we can introduce one lemma to let us make short work of this case:
+
+\begin{lemma}
+$T(n) = T(2n).$
+\end{lemma}
+\textbf{Proof} The binary representation of $2n$ is the binary representation of $n$ with a $0$ appended to the end. As per our definition of the values off the Thue-Morse sequence, the values $T(n)$ and $T(2n)$ are therefore equal. $\Box$
+
+In sub-case 1, therefore, we have $T(m) = T(m+2) = T(m+4) = 1,$ and because $m$ is even we may divide by 2 to get $T(m/2) + T(m/2 + 1) = T(m/2 + 2) = 1.$ We know that no sequences of $000$ or $111$ may exist in $T,$ so sub-case 1 is not allowed to exist. Using similar logic for sub-case 2, we see that it is also impossible. Therefore, Case 3 as a whole is impossible.
+
+- Case 4:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+ \hline
+ &&&&&\\
+$\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ & T(m+6) \\ 
+0 & 1 & 1 & 1 & 1 & 0 \\
+\hline
+&&&&&\\
+$T(m+2)$ & $T(m+3)$ & & T(m+4) & T(m+5) & T(m+6) \\
+1 & 1 & & 0 & 0 & 0 \\
+ \hline
+\end{tabular}
+\end{center}
+
+This contains a subsequence of $000,$ which is not allowed. Therefore, Case 4 is impossible.
+
+As none of the cases 1-4 are possible, we see that no sequence of $011110$ may exist. Therefore, no subsequence of $100001$ exists either, so No-4 is proven. $\Box$
+
+\subsubsection{No-5}
+
+\begin{theorem}[No-5 Theorem]
+There are no motifs of length 5.
+\end{theorem}
+
+Similarly to last time, we need only disprove the existence of a sequence $0111110$ in $T_3.$ We need only check two cases this time: knowing that $T_3(4m) = T_3(4m + 1),$ we cannot begin on a number which is 0 \emph{mod} 4, because the initial $01$ would fall across $4m$ and $4m+1$ for some $m.$ We also cannot begin on a number which is 3 \emph{mod} 4, because the final $10$ would fall across $4m$ and $4m+1.$ Therefore, we only have two cases to check. In the checking of each one, we first display the sequence $0111110$ matched up to the $T(m), ...$ sequence, and then below we remove overlines and duplicate values to arrive at an actual (hypothetical) sequence in $T.$
+
+Case 1:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c| } 
+ \hline
+ &&&&&&\\
+$T(m)$ & $\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ \\ 
+0 & 1 & 1 & 1 & 1 & 1 & 0 \\
+\hline
+&&&&&&\\
+$T(m)$ & $T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & $T(m+4)$ & $T(m+5)$ \\
+0 & 0 & 0 & 1 & & 0 & 1 \\
+ \hline
+\end{tabular}
+\end{center}
+
+This implies a sequence of $000$ in $T,$ which is not allowed.
+
+Case 2:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c| } 
+ \hline
+ &&&&&&\\
+$\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ & $T(m+6)$\\ 
+0 & 1 & 1 & 1 & 1 & 1 & 0 \\
+\hline
+&&&&&&\\
+$T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & $T(m+4)$ & $T(m+5)$ & $T(m+6)$ \\
+ 1 & 0 & 1 & & 0 & 0 & 0 \\
+ \hline
+\end{tabular}
+\end{center}
+
+This again results in a $000$ sequence in $T,$ which is not allowed.
+
+Therefore neither case is allowed, so No-5 is proven. $\Box$
+
+\subsubsection{No-9+ Theorem}
+The authors observed that for the first $10^{10}$ terms of $T_3,$ there are no motifs of lengths 9 or greater, which can be proven formally.
+
+\begin{theorem}[No-9+ Theorem]
+\label{no9}
+There are no motifs of length $9$ or greater in $T_3$.
+\end{theorem}
+
+Proving this requires us only to check for a \emph{run} of length 9 or greater. That is, we need to check for $000000000$ or $111111111$ (and by Lemma \ref{xiffxbar}, only $000000000.$) This is because a motif is defined as a run not contained inside any other run. That means:
+- Any run of length 9 is either contained inside a motif of length 9 or a motif of length greater than 9. This means that $000000000$ exists only if a counterexample to the No-9 Theorem exists.
+- Any motif of length 9 or greater must contain at least one run of length 9. This means that a counterexample to the No-9 Theorem exists only if $000000000$ exists.
+- Because we have established an implication in both directions, $000000000$ existing is equivalent to No-9 being false.
+
+We use the $\phi$-$\rho$ method to check all 4 possible cases.
+
+Case 1:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c|c|c| } 
+ \hline
+&&&&&&&&\\
+$T(m)$ & $T(m)$ & $\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ & $T(m+6)$ \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\hline
+&&&&&&&&\\
+$T(m)$ & & $T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & $T(m+4)$ & $T(m+5)$ & $T(m+6)$ \\
+0 & & 1 & 1 & 0 & & 1 & 1 & 0 \\
+ \hline
+\end{tabular}
+\end{center}
+
+As in the proof of Lemma \ref{triplet}, we know that the $T$ sequence is composed of $01$ and $10,$ which rules out the sequence $0110110$ at any point. This is because the breakdown into such blocks is either $[01][10][11][0$ or $0][11][01][10],$ both of which contain blocks of $11.$
+
+Case 2:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c|c|c| } 
+ \hline
+&&&&&&&&\\
+$T(m)$ & $\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ & $T(m+6)$ & $T(m+6)$ \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\hline
+&&&&&&&&\\
+$T(m)$ & $T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & $T(m+4)$ & $T(m+5)$ & $T(m+6)$ & \\
+0 & 1 & 1 & 0 & & 1 & 1 & 0 & \\
+ \hline
+\end{tabular}
+\end{center}
+
+This resulting in the same sequence $0110110$ as before, we see that it is also not allowed.
+
+Case 3:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c|c|c| } 
+ \hline
+&&&&&&&&\\
+$\overline{T(m+1)}$ & $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ & $T(m+6)$ & $T(m+6)$ & $\overline{T(m+7)}$ \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\hline
+&&&&&&&&\\
+$T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & $T(m+4)$ & $T(m+5)$ & $T(m+6)$ & & $T(m+7)$ \\
+1 & 1 & 0 & & 1 & 1 & 0 & & 1 \\
+ \hline
+\end{tabular}
+\end{center}
+
+The sequence $1101101$ is also disallowed for the same reason -- both possible demarcations into blocks of length 2, which are $1][10][11][01]$ and $[11][01][10][1,$ contain a block of $11.$
+
+Case 4:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c|c|c| } 
+ \hline
+&&&&&&&&\\
+ $\overline{T(m+2)}$ & $T(m+3)$ & $T(m+3)$ & $\overline{T(m+4)}$ & $\overline{T(m+5)}$ & $T(m+6)$ & $T(m+6)$ & $\overline{T(m+7)}$ & $\overline{T(m+8)}$ \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\hline
+&&&&&&&&\\
+$T(m+2)$ & $T(m+3)$ & & $T(m+4)$ & $T(m+5)$ & $T(m+6)$ & & $T(m+7)$ & $T(m+8)$ \\
+1 & 0 & & 1 & 1 & 0 & & 1 & 1 \\
+ \hline
+\end{tabular}
+\end{center}
+
+This gives the sequence $1011011,$ which can only be broken into $[10][11][01][1$ and $1][01][10][11],$ both of which have a $11.$
+
+None of the four cases are allowed, so No-9 is proven. $\Box$
 
 \subsection{6,8 Synchronization Conjecture}
 We observe that the runlengths of 1s of $T_3$ or $\Lambda{_1(T_3)}$ have a pattern in the order of 6s and 8s. In the sequence $\Lambda{_1(T_3)}$, 6 almost always follow 8 and vice versa. In sequence, 6 does in fact follow 8 and vice versa until the location 87384 in T where there is an anomaly of a 6 following another 6. We have found by observation that frequency of anomalies stays between $0.019\%$ and $0.028\%$ from $10^7$ to $10^9$ in the digits of $\Lambda{_1(T_3)}$. The frequency of anomaly increases from the location 87384 forever.
@@ -88,13 +421,19 @@ Ratio for the first $2^{35}$ digits: 1.0228080103552828
 
 The ratio does indeed appear to approach $1,$ but only very slowly -- even at over $10^{10}$ entries of $T_3$ computed, there are still ~2\% more zeros than ones. Therefore, we conjecture the following:
 
-\textbf{Ratio Conjecture} $r(n)$ is never less than $1.$
+\begin{conjecture}[Ratio Conjecture]
+\label{ratio}
+$r(n)$ is never less than $1.$
+\end{conjecture}
 
 \subsection{The Weak Ratio Theorem}
 
-\textbf{Weak Ratio Theorem} $r(2^k) > 1$ for all integers $k > 4.$
+\begin{theorem}[Weak Ratio Theorem]
+\label{wr}
+$r(2^k) > 1$ for all integers $k > 4.$
+\end{theorem}
 
-As a side note, the restriction $k > 4$ exists because the first one occurs at position $8$ in $T3,$ so $r(2^k)$ for $n < 5$ is undefined.
+As a side note, the restriction $k > 4$ exists because the first one occurs at position $8$ in $T_3,$ so $r(2^k)$ for $n < 5$ is undefined.
 
 \textbf{Proof} To start, as in the proof of Lemma 2.3, we may consider that for some natural number $k,$ the entire Thue-Morse sequence is composed of two blocks of length $2^k,$ which we may call $A_k$ and $B_k,$ such that $B_k$ is $A_k$ with every $0$ and $1$ swapped. Next, we will consider three pairs of functions: $\alpha_{0/1},$ $\beta_{0/1},$ and $\gamma_{0/1}.$ $\alpha_0(k)$ is the number of zeros in the block $A_k$ when we count every third element, \emph{starting from element 1}, and $\alpha_1(k)$ is the number of ones when we count in the same manner. The $\beta$ functions are the totals when taken starting on the second element of the block $A_k,$ and the $\gamma$ functions are counted starting on the third elements. Based on the definition of the $T_3$ sequence, we see that:
 
@@ -102,7 +441,9 @@ $$r(2^k) = \frac{\alpha_0(k)}{\alpha_1(k)}.$$
 
 We also note that because $\alpha_0(k) > 0$ and $\alpha_1(k) > 0$ for $k > 4,$ the Weak Ratio Theorem can be phrased in terms of a difference.
 
-\textbf{Alternative Weak Ratio Theorem Statement} $\alpha_0(k) > \alpha_1(k)$ for all $k > 4.$
+\begin{theorem}[Alternative Statement Of \ref{wr}]
+$\alpha_0(k) > \alpha_1(k)$ $\forall$ $k > 4.$
+\end{theorem}
 
 We may continue by deriving expressions for the values of each of these functions by stating them in terms of equivalent values for smaller blocks. Assuming $k$ is even, $2^k$ is equal to 1 \emph{mod} 3, and if $k$ is odd then $2^k$ is equal to 2 \emph{mod} 3. Now, considering $\alpha_0(k+1)$ for even $k,$ we know that we count through the two blocks $AB,$ and because block $A$ has a remainder of 1 \emph{mod} 3, we start counting zeros in block $B$ at the third element, which is equivalent to counting ones starting at the third element in $A$ (because $B$ is equal to $A$ with zeros and ones swapped.) Therefore, we see that
 $$\alpha_0(k+1) = \alpha_0(k) + \gamma_1(k).$$
@@ -116,7 +457,10 @@ $$\alpha_0(k+1) = \alpha_0(k) + \beta_1(k), \alpha_1(k+1) = \alpha_1(k) + \beta_
 $$\beta_0(k+1) = \beta_0(k) + \gamma_1(k), \beta_1(k+1) = \beta_1(k) + \gamma_0(k),$$
 $$\gamma_0(k+1) = \gamma_0(k) + \alpha_1(k), \gamma_1(k+1) = \gamma_1(k) + \alpha_0(k).$$
 
-\textbf{Lemma 3.1.1} For even $k,$ $\alpha_0(k-3) + \beta_1(k-3) > \alpha_1(k-3) + \beta_0(k+3)$ \emph{iff} $r(2^k) > 1.$
+\begin{lemma}
+\label{even1}
+For even $k,$ $\alpha_0(k-3) + \beta_1(k-3) > \alpha_1(k-3) + \beta_0(k+3)$ \emph{iff} $r(2^k) > 1.$
+\end{lemma}
 
 \textbf{Proof} Noting that $k$ is even, we see that
 $$\alpha_0(k) = \alpha_0(k-1) + \beta_1(k-1) = \alpha_0(k-2) + \gamma_1(k-2) + \beta_1(k-2) + \alpha_0(k-2).$$
@@ -132,30 +476,111 @@ Dividing this expression by $3$ will not change its sign, so if
 $$\alpha_0(k-3) - \alpha_1(k-3) + \beta_1(k-3) - \beta_0(k-3) > 0,$$
 Then $r(2^k) > 1.$ Rearranging terms in the expansion gives us Lemma 3.1.1.
 
-\textbf{Lemma 3.1.2} For odd $k,$ $\alpha_0(k-3) + \gamma_1(k-3) > \alpha_1(k-3) + \gamma_0(k-3)$ \emph{iff} $r(2^k) > 1.$
+\begin{lemma}
+\label{odd1}
+For odd $k,$ $\alpha_0(k-3) + \gamma_1(k-3) > \alpha_1(k-3) + \gamma_0(k-3)$ \emph{iff} $r(2^k) > 1.$
+\end{lemma}
 
 \textbf{Proof} We proceed in the same way as last time, except switching the use of the odd and even expansions.
 
-We can now restate Lemmas 3.1.1 and 3.1.2 slightly, remembering the Alternative Weak Ratio Theorem Statement and replacing $k$ with $k+3$ and $k-3$ with $k:$
+We can now restate Lemmas \ref{even1} and \ref{odd1} slightly, remembering the Alternative Weak Ratio Theorem Statement and replacing $k$ with $k+3$ and $k-3$ with $k:$
 
-\textbf{Lemma 3.1.1 Restated} For odd $k,$ $\alpha_0(k) + \beta_1(k) > \alpha_1(k) + \beta_0(k)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\begin{lemma}[\ref{even1} Restated]
+\label{even2}
+For odd $k,$ $\alpha_0(k) + \beta_1(k) > \alpha_1(k) + \beta_0(k)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\end{lemma}
 
-\textbf{Lemma 3.1.2 Restated} For even $k,$ $\alpha_0(k) + \gamma_1(k) > \alpha_1(k) + \gamma_0(k)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\begin{lemma}[\ref{odd1} Restated]
+\label{odd2}
+For even $k,$ $\alpha_0(k) + \gamma_1(k) > \alpha_1(k) + \gamma_0(k)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\end{lemma}
 
 We now remember that for odd $k,$ $\alpha_0(k+1) = \alpha_0(k) + \beta_1(k),$ and $\alpha_0(k+1) = \alpha_0(k) + \gamma_1(k)$ for even $k.$ Doing the analogous expansions for $\alpha_1(k),$ we can restate the two lemmas yet again.
 
-\textbf{Lemma 3.1.1 Restated} For odd $k,$ $\alpha_0(k+1) > \alpha_1(k+1)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\begin{lemma}[\ref{even1} Restated]
+\label{even3}
+For odd $k,$ $\alpha_0(k+1) > \alpha_1(k+1)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\end{lemma}
 
-\textbf{Lemma 3.1.2 Restated} For even $k,$ $\alpha_0(k+1) > \alpha_1(k+1)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\begin{lemma}[\ref{odd1} Restated]
+\label{odd3}
+For even $k,$ $\alpha_0(k+1) > \alpha_1(k+1)$ \emph{iff} $\alpha_0(k+3) > \alpha_1(k+3).$
+\end{lemma}
 
 We can combine these two by forgetting the irrelevant odd/even distinction and replacing $k+1$ with $k$ and $k+3$ with $k+2:$
 
-\textbf{Lemma 3.1.3} For all $k,$ $\alpha_0(k) > \alpha_1(k)$ \emph{iff} $\alpha_0(k+2) > \alpha_1(k+2).$
+\begin{lemma}
+\label{jump2}
+For all $k,$ $\alpha_0(k) > \alpha_1(k)$ \emph{iff} $\alpha_0(k+2) > \alpha_1(k+2).$
+\end{lemma}
 
 This means that we can show $\alpha_0(k) > \alpha_1(k)$ for $k = 5, 6$ and be done. In fact, we can check by hand:
 
 $$\alpha_0(5) = 10, \alpha_1(5) = 1, \alpha_0(6) = 20, \alpha_1(6) = 2.$$
 
-This completes the proof.
+This completes the proof. $\Box$
+
+\subsection{Reversing $\phi$-$\rho$}
+
+In Section 2, we developed the notion of the $\phi$-$\rho$ method, which may be thought of more generally as a \emph{transformation} from a sequence in $T_3$ to one or more possible sequences in $T$ which would be its equivalent. However, we can also develop the opposite notion -- a transformation from $T$ to $T_3.$ Of course this is already possible:
+
+$$[0]11[0]10[0]11[0]01[0] \cdots \rightarrow 00000 \cdots .$$
+
+But we can invert $\phi$-$\rho$ to obtain a more useful transformation which uses \emph{every} digit in $T$ to create the corresponding sequence in $T_3.$ We may then apply this transformation to the \emph{whole} of the Thue-Morse sequence to better understand the $T_3$ sequence itself.
+
+We recall that the sequence
+
+$$T_3(n), T_3(n+1), T_3(n+2), T_3(n+3), ...$$
+
+for some $n$ which is a multiple of 4, is equivalent to
+
+$$T(m), T(m), \overline{T(m+1)}, \overline{T(m+2)}, ...$$
+
+For $m = 3n/4.$ Setting $n = m = 0,$ we see that the $T_3$ sequence itself is equal to:
+
+$$T(0), T(0), \overline{T(1)}, \overline{T(2)}, ... .$$
+
+Now suppose we want to calculate the ratio function $r(n)$ for some $n$ which is not a power of 2. We will define three new pairs of functions $\hat{\alpha},$ $\hat{\beta},$ and $\hat{\gamma}$ which are similar to the plain $\alpha \beta \gamma$ defined above, but which calculate the corresponding values for the first $n$ instead of the first $2^n.$ In other words,
+
+$$\alpha_0(k) = \hat{\alpha}_0(2^k)$$
+
+and so forth.
+
+We now note that the sequence $T(0), T(0), ...$ above may be reordered as:
+
+$$2 * (T(0) + T(3) + ...) + (\overline{T(1)} + \overline{T(4)} + ...) + (\overline{T(2)} + \overline{T(5)} + ...) .$$
+
+For some number $n,$ the first $4n$ digits of the $T_3$ sequence are equal to:
+
+$$2 * \sum_{k=0}^{n-1} T(3k) + \sum_{k=0}^{n-1} \overline{T(3k+1)} + \sum_{k=0}^{n-1} \overline{T(3k+2)}.$$
+
+In the same manner, we can express the number of zeros in the first $4n$ digits of $T_3$ (or the first $12n$ digits of $T$) as:
+
+$$\hat{\alpha}_0(12n) = 2 * \hat{\alpha}_0(3n) + \hat{\beta}_1(3n) + \hat{\gamma}_1(3n).$$
+
+Replacing $3n$ with $n,$ we see:
+
+$$\hat{\alpha}_0(4n) = 2 * \hat{\alpha}_0(n) + \hat{\beta}_1(n) + \hat{\gamma}_1(n)$$
+
+for all $n$ which is a multiple of $3.$ In fact, we can add one further restriction: if $n$ is also even, then the total numbers of zeros in the first $n$ digits of the Thue-Morse sequence is equal to the total number of ones, which are each equal to $n/2.$ We can then restate the above expression as:
+
+$$\hat{\alpha}_0(4n) = 2 * \hat{\alpha}_0(n) + \frac{n}{2} - \hat{\alpha}_1(n).$$
+
+Correspondingly, for $\hat{\alpha}_1$ we have:
+
+$$\hat{\alpha}_1(4n) = 2 * \hat{\alpha}_1(n) + \frac{n}{2} - \hat{\alpha}_0(n).$$
+
+Subtracting:
+
+\begin{lemma}
+\label{ratiospec}
+$$\hat{\alpha_0}(4n) - \hat{\alpha_1}(4n) = 3 * \hat{\alpha}_0(n) - 3 * \hat{\alpha}_1(n).$$
+\end{lemma}
+
+This may be viewed as a generalized form of Lemma \ref{jump2}.
+
+\begin{remark}
+We can use this result to show roughly how fast the ratio function $r(n)$ decays. As the total size of $\alpha_0(k) + \alpha_1(k)$ is at most 1 away from $\frac{2^k}{3},$ we see that in the limit, $r(2^{k+2}) - 1 \simeq \frac{3}{4} * (r(2^k) - 1).$
+\end{remark}
 
 \end{document}
