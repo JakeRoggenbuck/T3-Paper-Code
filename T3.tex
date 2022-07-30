@@ -4,6 +4,7 @@
 \newtheorem{lemma}{Lemma}[section]
 \newtheorem{conjecture}{Conjecture}[section]
 \newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
 \begin{document}
 
 \title{Exploring the Thue-Morse sequence}
@@ -571,8 +572,15 @@ $$\hat{\alpha}_1(4n) = 2 * \hat{\alpha}_1(n) + \frac{n}{2} - \hat{\alpha}_0(n).$
 
 Subtracting:
 
-$$\hat{\alpha_0}(4n) - \hat{\alpha_1}(4n) = \hat{\alpha}_0(n) - \hat{\alpha}_1(n).$$
+\begin{lemma}
+\label{ratiospec}
+$$\hat{\alpha_0}(4n) - \hat{\alpha_1}(4n) = 3 * \hat{\alpha}_0(n) - 3 * \hat{\alpha}_1(n).$$
+\end{lemma}
 
 This may be viewed as a generalized form of Lemma \ref{jump2}.
+
+\begin{remark}
+We can use this result to show roughly how fast the ratio function $r(n)$ decays. As the total size of $\alpha_0(k) + \alpha_1(k)$ is at most 1 away from $\frac{2^k}{3},$ we see that in the limit, $r(2^{k+2}) - 1 \simeq \frac{3}{4} * (r(2^k) - 1).$
+\end{remark}
 
 \end{document}
