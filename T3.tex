@@ -434,8 +434,8 @@ This gives the sequence $1011011,$ which can only be broken into $[10][11][01][1
 None of the four cases are allowed, so No-9 is proven.
 \end{proof}
 
-\subsection{6,8 Synchronization Conjecture}
-We observe that the runlengths of 1s of $T_3$ or $\Lambda{_1(T_3)}$ have a pattern in the order of 6s and 8s. In the sequence $\Lambda{_1(T_3)}$, runlengths of 6 almost always follow runlengths of 8 and vice versa. runlengths of 6 always fall on an odd numbered location in T and runlengths of 8 always fall on an even numbered location in T. In sequence, 6 does in fact follow 8 and vice versa until the location 87384 in T where there is an anomaly of a 6 following another 6. However, the odd and even pattern of runlength location of 6 and 8 respectivly is still maintained, as both subsequent 6s are at odd locations in T. We have found by observation that frequency of anomalies stays between $0.019\%$ and $0.028\%$ from $10^7$ to $10^9$ in the digits of $\Lambda{_1(T_3)}$. The frequency of anomaly increases from the location 87384 forever.
+\subsection{Occurrences of 6 and 8 in $\Lambda(T_3)$}
+We define $\Lambda_1(T_3)$ to be the sequence made of every other entry of $\Lambda(T_3)$ starting at the second element -- that is, the series made up of the lengths of motifs in $T$ consisting of the digit $1.$ Next, we consider the sequence $S$ which is the $\Lambda_1(T_3)$ sequence without any entries other than $6$ or $8.$ In this sequence, $6$ and $8$ alternate until the location corresponding to the motif starting at entry $87384 \simeq 2^{18}/3$ in $T,$ when two entries of $6$ in a row occur. Referring to such a violation of the alternation of $6$ and $8$ as an \emph{anomaly}, we observed that the frequency of anomalies slowly increases for the first $10^9$ digits but never goes above $0.03\%$ of the total.
 
 \subsection{Uniform 3s Conjecture}
 The frequency of the value 3 in $\Lambda{_1(T_3)}$ and $\Lambda{_0(T_3)}$ is approximately uniform across the whole function, starting at an arbitrary value leveling out to 0.33 approximately after 10,000 in T.
