@@ -23,7 +23,7 @@
 \maketitle
 
 \begin{abstract}
-We investigate some interesting properties of the sequence made up of every third term of the Thue-Morse sequence. Moreover, we create proofs for said properties.
+We investigate some interesting properties of the sequence made up of every third term of the Thue-Morse sequence, and consider other similar sequences.
 \end{abstract}
 
 \tableofcontents
@@ -33,7 +33,7 @@ The Thue-Morse sequence, or $T,$ can be defined in many ways, and we will use th
 \begin{definition}[Thue-Morse Sequence]
 The Thue-Morse sequence is the sequence whose $n$th term $T(n)$ depends on the number of ones in the binary representation of $n.$ If this number is odd, $T(n)$ is $1;$ otherwise, it is $0.$
 \end{definition}
-The sequence $T_3,$ which is defined as the sequence whose $n$th term is $T(3n),$ has some interesting properties that we will investigate -- among the most interesting of which are the lengths of runs in the sequence and the persistent imbalance of zeroes and ones. We will prove two main results:
+The sequence $T_3,$ which is defined as the sequence whose $n$th term is $T(3n),$ has some interesting properties that we will investigate -- among the most interesting of which are the lengths of runs in the sequence and the persistent imbalance of zeroes and ones.
 
 \begin{theorem}[Motif Theorem]
 \label{mlength}
@@ -45,7 +45,7 @@ Motifs in $T_3$ are only of lengths 1, 3, 6, 7, or 8.
 The number of zeroes in the first $n$ digits of $T_3$ always exceeds the number of ones for any $n > 0.$
 \end{theorem}
 
-We also develop two main techniques to prove these theorems and others -- the segment-matching method and its reverse -- which may be extended in the future to investigate $T_n,$ which is defined so that $T_n(x) = T(nx).$
+We also develop two main techniques to prove these theorems and others -- the segment-matching method and its reverse. Newman proved the Imbalance Theorem in \cite{analysis}, but we use our methods to prove it without resorting to analysis. Furthermore, our methods may be extended in the future to investigate $T_n,$ which is defined so that $T_n(x) = T(nx).$
 
 \section{Run-Length Of $T_3$}
 
@@ -94,14 +94,19 @@ We begin by observing that a motif of zeroes of length 2 is the sequence $00$ su
 The sequences $000$ and $111$ do not exist in the Thue-Morse sequence.
 \end{lemma}
 
-\begin{proof} The non-existence of runs of length 3 in the sequence is a well-known fact, but may be established as follows: jumping from $2n$ to $2n+1$ changes a $0$ to a $1$ and nothing else, which means that $T_{2n}$ and $T_{2n+1}$ are opposite. Therefore, the entire Thue-Morse sequence consists of concatenations of $01$ and $10,$ which allow for no $000$ or $111.$
+\begin{proof} The non-existence of runs of length 3 may be established by \cite[Corollary 1]{ubiq15}, which states that there are no instances of a segment $n$ in the Thue-Morse sequence which intersect with other instances of $n.$ We see without loss of generality that $000$ has the sequence $00$ overlapping with a different instance of itself, therefore ruling it out.
 \end{proof}
+
+\begin{definition}
+\label{overline}
+$\overline{X}$ is defined as $X$ with all zeros and ones interchanged.
+\end{definition}
 
 Lemma \ref{triplet} allowed for us to create a computer program to comb through all ten-digit sequences of zeroes and ones, with the constraints that they follow the pattern $0XX1XX1XX0$ and do not contain $000$ or $111.$  The only ten-digit sequences that satisfy these constraints are $0011001010,$ $0011001100,$ $0011011010,$$0101001010,$ $0101001100,$ $0101011010,$ $0101101010,$ and $0101101100.$ We do not check for any occurrences of $1001$ in $T_3,$ (which would follow the pattern $1XX0XX0XX1$ in $T$) but this is not necessary, as shown by:
 
 \begin{lemma}
 \label{xiffxbar}
-A sequence $X$ exists in the Thue-Morse sequence \emph{iff} the sequence $\overline{X}$ also exists, where $\overline{X}$ is $X$ with $0$ and $1$ interchanged.
+A sequence $X$ exists in the Thue-Morse sequence \emph{iff} the sequence $\overline{X}$ also exists.
 \end{lemma}
 
 \begin{proof}
@@ -146,11 +151,15 @@ $$T(3n + 9) \neq T(m+2).$$
 
 This sequence of four values is equivalent to $T_3(n), T_3(n+1), T_3(n+2), T_3(n+3)$ by the definition of the $T_3$ sequence. Knowing that $n$ is a multiple of 4, then, and therefore that $m$ is a multiple of 3, we see that the $T_3$ sequence is made up of blocks of length 4 for every multiple of 3 $m.$ Denoting the binary complement of $x$ by $\overline{x},$ these blocks go:
 
-$$T(m), T(m), \overline{T(m+1)}, \overline{T(m+2)}.$$
+\begin{equation}
+T(m), T(m), \overline{T(m+1)}, \overline{T(m+2)}.
+\end{equation}
 
 Because this segment in $T_3$ continues every four entries with a new $m,$ for any segment $X$ we wish to check, we need only identify X with a tuple of consecutive elements of the sequence
 
-$$T(m), T(m), \overline{T(m+1)}, \overline{T(m+2)}, T(m+3), T(m+3), \overline{T(m+4)}, \overline{T(m+5)}, \cdots .$$
+\begin{equation}
+T(m), T(m), \overline{T(m+1)}, \overline{T(m+2)}, T(m+3), T(m+3), \overline{T(m+4)}, \overline{T(m+5)}, \cdots .
+\end{equation}
 
 For some $m$ which is a multiple of 3. We only need to check four possible tuples -- beginning the tuple at the first entry equal to $T(m+3)$ is the same as checking starting at $T(m)$ for a different value of $m,$ so we only need to match up $X$ with a tuple starting at each of the first four entries. In fact, we may need to check fewer than four, because some may be ruled out if two consecutive values in the segment are different but each match up to the same value in the infinite sequence. Removing the overlines and duplicate entries then gives us four sequences in $T$ to check, each of which are at most as long as $X.$
 
@@ -256,29 +265,7 @@ $T(m+1)$ & $T(m+2)$ & $T(m+3)$ & & T(m+4) & T(m+5) \\
 \end{tabular}
 \end{center}
 
-Such a subsequence is also impossible. Recall from Lemma \ref{xiffxbar} that the Thue-Morse sequence is composed of two concatenated blocks of length $2^k$ for any given $k,$ which are opposites of each other. For $k = 1,$ these two sequences are $01$ and $10.$ So there are two cases.
-
-- Sub-case 1
-The arbitrary $m$ we chose is even. Therefore, the sequence starting at position $m$ of $10101$ may be bracketed into blocks of $01$ and $10$ as $[10][10][1.$ This third block must be finished by a $0,$ so we see that we will have a sequence of $[10][10][10].$
-
-- Sub-case 2
-If $m$ is odd, the sequence is instead $1][01][01].$ This is completed to be $[01][01][01].$
-
-Now we can introduce one lemma to let us make short work of this case:
-
-\begin{lemma}
-$T(n) = T(2n).$
-\end{lemma}
-
-\begin{proof}
-The binary representation of $2n$ is the binary representation of $n$ with a $0$ appended to the end. As per our definition of the values of the Thue-Morse sequence, the values $T(n)$ and $T(2n)$ are therefore equal.\
-\end{proof}
-
-\begin{remark}
-By the previous lemma, $T_{2n} = T_n.$
-\end{remark}
-
-In sub-case 1, therefore, we have $T(m) = T(m+2) = T(m+4) = 1,$ and because $m$ is even we may divide by 2 to get $T(m/2) + T(m/2 + 1) = T(m/2 + 2) = 1.$ We know that no sequences of $000$ or $111$ may exist in $T,$ so sub-case 1 does not exist. Using similar logic for sub-case 2, we see that it is also impossible. Therefore, Case 3 as a whole is impossible.
+Such a subsequence is also impossible. \cite[Corollary 1]{ubiq15} disallows the segment $10101$, as this has $101$ overlapping with itself.
 
 - Case 4:
 
@@ -434,17 +421,22 @@ This gives the sequence $1011011,$ which can only be broken into $[10][11][01][1
 None of the four cases are allowed, so No-9 is proven.
 \end{proof}
 
-\subsection{6,8 Synchronization Conjecture}
-We observe that the runlengths of 1s of $T_3$ or $\Lambda{_1(T_3)}$ have a pattern in the order of 6s and 8s. In the sequence $\Lambda{_1(T_3)}$, runlengths of 6 almost always follow runlengths of 8 and vice versa. runlengths of 6 always fall on an odd numbered location in T and runlengths of 8 always fall on an even numbered location in T. In sequence, 6 does in fact follow 8 and vice versa until the location 87384 in T where there is an anomaly of a 6 following another 6. However, the odd and even pattern of runlength location of 6 and 8 respectivly is still maintained, as both subsequent 6s are at odd locations in T. We have found by observation that frequency of anomalies stays between $0.019\%$ and $0.028\%$ from $10^7$ to $10^9$ in the digits of $\Lambda{_1(T_3)}$. The frequency of anomaly increases from the location 87384 forever.
+\subsection{Miscellaneous Remarks}
 
-\subsection{Uniform 3s Conjecture}
+\begin{remark}
+Some run-lengths which are allowed only occur starting at certain remainders of 4. For example, runs of length 8 only occur starting at 2 \emph{mod} 4. More investigation may be needed to uncover patterns in these.
+\end{remark}
+
+\begin{remark}
+We define $\Lambda_1(T_3)$ to be the sequence made of every other entry of $\Lambda(T_3)$ starting at the second element -- that is, the series made up of the lengths of motifs in $T$ consisting of the digit $1.$ Next, we consider the sequence $S$ which is the $\Lambda_1(T_3)$ sequence without any entries other than $6$ or $8.$ In this sequence, $6$ and $8$ alternate until the location corresponding to the motif starting at entry $87384 \simeq 2^{18}/3$ in $T,$ when two entries of $6$ in a row occur. Referring to such a violation of the alternation of $6$ and $8$ as an \emph{anomaly}, we observed that the frequency of anomalies slowly increases for the first $10^9$ digits but never goes above $0.03\%$ of the total.
+\end{remark}
+
+\begin{remark}
 The frequency of the value 3 in $\Lambda{_1(T_3)}$ and $\Lambda{_0(T_3)}$ is approximately uniform across the whole function, starting at an arbitrary value leveling out to 0.33 approximately after 10,000 in T.
+\end{remark}
 
 \includegraphics[scale=0.4]{lambda_ratio_from_data1_ones_100}
 \includegraphics[scale=0.4]{lambda_ratio_from_data1_ones_10000}
-
-\subsection{Primes Conjecture}
-We observe that for any location X in T, where X is prime, the value of $\Lambda{(T_3)}$ is equal to 1.
 
 \section{The Imbalance Of Zeroes And Ones}
 
@@ -535,11 +527,17 @@ $$\alpha_0(4n) = 2 * \alpha_0(n) + \beta_1(n) + \gamma_1(n)$$
 for all $n$ which is a multiple of $12$ (as this satisfies the requirement that $n$ is a multiple of 4 from above and that $n$ is a multiple of 3).
 We also know that $n$ is even, so the total numbers of zeroes in the first $n$ digits of the Thue-Morse sequence is equal to the total number of ones, which are each equal to $n/2.$ We can then restate the above expression as:
 
-$$\alpha_0(4n) = 2 * \alpha_0(n) + \frac{n}{2} - \alpha_1(n).$$
+\begin{equation}
+\label{4n0}
+\alpha_0(4n) = 2 * \alpha_0(n) + \frac{n}{2} - \alpha_1(n).
+\end{equation}
 
 Likewise, we have:
 
-$$\alpha_1(4n) = 2 * \alpha_1(n) + \frac{n}{2} - \alpha_0(n).$$
+\begin{equation}
+\label{4n1}
+\alpha_1(4n) = 2 * \alpha_1(n) + \frac{n}{2} - \alpha_0(n).
+\end{equation}
 
 We can subtract these two expressions to get a value for $d(n)$ by Definition \ref{imb}:
 
@@ -549,8 +547,38 @@ $d(4n) = 3 * d(n)$ for all numbers $n$ which are positive multiples of 12.
 \end{lemma}
 
 \begin{remark}
-We can use this result to show roughly how fast the ratio of zeroes to ones decays. Let $r(n)$ denote $\alpha_0(n)/\alpha_1(n).$ The total size of $\alpha_0(k) + \alpha_1(k)$ is at most 1 away from $\frac{k}{3},$ we see that in the limit, $r(4k) - 1 \simeq \frac{3}{4} * (r(k) - 1).$
+We can use this result to show roughly how fast the ratio of zeroes to ones decays. Let $r(n)$ denote $\alpha_0(n)/\alpha_1(n).$ The total size of $\alpha_0(k) + \alpha_1(k)$ is at most 1 away from $\frac{k}{3},$ so we see that in the limit, $r(4k) - 1 \simeq \frac{3}{4} * (r(k) - 1).$
 \end{remark}
+
+We can generalize Lemma \ref{ratiospec} to prove an interesting result about the precise decay of the ratio function $r(n).$
+
+\begin{lemma}
+Equations \ref{4n0} and \ref{4n1} are true for all powers of 2.
+\end{lemma}
+
+\begin{proof}
+
+Recalling the notation $\overline{X}$ from Definition \ref{overline}, and the proof of Lemma \ref{xiffxbar}, we see that if we denote the first $2^n$ digits of the Thue-Morse sequence by $A$, the first $2^{n+2}$ digits of the sequence are equal to $A \overline{A} \overline{A} A.$
+
+Suppose $k$ is an even power of 2. If we want to determine $\alpha_0(4k),$ we start by counting every third digit of the first block $A,$ giving us $\alpha_0(k)$ zeros. Then, because the block $A$ has a length which is 1 \emph{mod} 3, when counting every third element we enter the second block $\overline{A}$ starting at the \emph{third} element. Because counting zeros in $\overline{A}$ is equivalent to counting ones in $A,$ and because we are starting at the third element, this block contributes $\gamma_1(k)$ zeros towards the total. Continuing, we see that
+
+$$\alpha_0(4k) = 2 * \alpha_0(k) + \beta_1(k) + \gamma_1(k)$$
+
+and similarly for $\alpha_1.$ Furthermore, the same result occurs when we assume that $k$ is an \emph{odd} power of two.
+
+\end{proof}
+
+This means that Lemma \ref{ratiospec} is true for powers of 2.
+
+\begin{lemma}
+$r(n) = r(2n)$ for all n which is an odd power of 2 at least 5.
+\end{lemma}
+
+\begin{proof}
+
+We can start by showing that $r(32) = r(64)$ by computer search, which is indeed true. Next, we see that this implies that $r(128) = r(256)$. By induction, this holds forever after. This is the cause of the odd behavior at the beginning of the section, where any given ratio value appears twice before dropping.
+
+\end{proof}
 
 \subsection{Imbalance Theorem}
 
@@ -596,7 +624,17 @@ We see that $d(n) \geq 5$ for all multiples of 12 between $x$ and $4x,$ so by ap
 
 To wrap up the proof of the Imbalance Theorem, let $x$ be a multiple of $12$ such that $d(n) \geq 5$ for all $n$ such that $x \leq n \leq 4x.$ Then by Lemma \ref{4jump} and induction, we have that $d(n) \geq 5$ for all $n \geq x.$ Then, by showing $d(n) > 0$ for all $0 < n < x,$ we have proven the Imbalance Theorem.
 
-A computer calculation shows that$d(n) \geq 5$ for all $n$ such that $24 \leq n \leq 96,$ and that $d(n) > 0$ for all $n$ such that $0 < n < 24.$ Therefore, the Imbalance Theorem is proven.
+A computer calculation shows that $d(n) \geq 5$ for all $n$ such that $24 \leq n \leq 96,$ and that $d(n) > 0$ for all $n$ such that $0 < n < 24.$ Therefore, the Imbalance Theorem is proven.
 \end{proof}
+
+\begin{thebibliography}{9}
+
+\bibitem{analysis}
+Donald Newman, \emph{On the Number of Binary Digits in a Multiple of Three}.
+
+\bibitem{ubiq15}
+Jean-Paul Allouche and Jeffrey Shallit, \emph{The ubiquitous Prouhet-Thue-Morse sequence}.
+
+\end{thebibliography}
 
 \end{document}
