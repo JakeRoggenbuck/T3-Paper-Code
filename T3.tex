@@ -29,13 +29,13 @@ We investigate some interesting properties of the sequence made up of every thir
 \tableofcontents
 
 \section{Introduction}
-The Thue-Morse sequence, or $T,$ can be defined in many ways, and we will use the following definition for the $n$th digit of the sequence, denoted by $T(n):$ 
+The Thue-Morse sequence, or $T,$ can be defined in many ways, and we will use the following definition for the $n$th digit of the sequence, denoted by $T(n):$ We were motivated to investigate the questions posed in this paper after reviewing our experimental data that hinted our eventual discoveries, such as the run-lengths of $T_3$ in section 2 and the imbalance of zeros to ones of $T_3$ in section 3.
 
 \begin{definition}[Thue-Morse Sequence]
 The Thue-Morse sequence is the sequence whose $n$th term $T(n)$ depends on the number of ones in the binary representation of $n.$ If this number is odd, $T(n)$ is $1;$ otherwise, it is $0.$
 \end{definition}
 
-The sequence $T_3,$ which is defined as the sequence whose $n$th term is $T(3n),$ has some interesting properties that we will investigate -- among the most interesting of which are the lengths of runs in the sequence and the persistent imbalance of zeroes and ones.
+The sequence $T_3,$ which is defined as the sequence whose $n$th term is $T(3n),$ has some interesting properties that we will investigate -- among the most interesting of which are the lengths of runs in the sequence and the persistent imbalance of zeroes and ones. Below we show the beginnings of Thue-Morse (on left) and the equivalent ${T_3}$ (on right).
 
 \includegraphics[scale=0.4]{t_t3}
 
@@ -425,22 +425,6 @@ This gives the sequence $1011011,$ which can only be broken into $[10][11][01][1
 None of the four cases are allowed, so No-9 is proven.
 \end{proof}
 
-\subsection{Miscellaneous Remarks}
-
-\begin{remark}
-Some run-lengths which are allowed only occur starting at certain remainders of 4. For example, runs of length 8 only occur starting at 2 \emph{mod} 4. More investigation may be needed to uncover patterns in these.
-\end{remark}
-
-\begin{remark}
-We define $\Lambda_1(T_3)$ to be the sequence made of every other entry of $\Lambda(T_3)$ starting at the second element -- that is, the series made up of the lengths of motifs in $T$ consisting of the digit $1.$ Next, we consider the sequence $S$ which is the $\Lambda_1(T_3)$ sequence without any entries other than $6$ or $8.$ In this sequence, $6$ and $8$ alternate until the location corresponding to the motif starting at entry $87384 \simeq 2^{18}/3$ in $T,$ when two entries of $6$ in a row occur. Referring to such a violation of the alternation of $6$ and $8$ as an \emph{anomaly}, we observed that the frequency of anomalies slowly increases for the first $10^9$ digits but never goes above $0.03\%$ of the total.
-\end{remark}
-
-\begin{remark}
-The frequency of the value 3 in $\Lambda{_1(T_3)}$ and $\Lambda{_0(T_3)}$ is approximately uniform across the whole function, starting at an arbitrary value leveling out to 0.33 approximately after 10,000 in T.
-\end{remark}
-
-\includegraphics[scale=0.4]{lambda_ratio_from_data1_ones_100}
-\includegraphics[scale=0.4]{lambda_ratio_from_data1_ones_10000}
 
 \section{The Imbalance Of Zeroes And Ones}
 
@@ -630,6 +614,23 @@ To wrap up the proof of the Imbalance Theorem, let $x$ be a multiple of $12$ suc
 
 A computer calculation shows that $d(n) \geq 5$ for all $n$ such that $24 \leq n \leq 96,$ and that $d(n) > 0$ for all $n$ such that $0 < n < 24.$ Therefore, the Imbalance Theorem is proven.
 \end{proof}
+
+\section{Miscellaneous Remarks}
+
+\begin{remark}
+Some run-lengths which are allowed only occur starting at certain remainders of 4. For example, runs of length 8 only occur starting at 2 \emph{mod} 4. More investigation may be needed to uncover patterns in these.
+\end{remark}
+
+\begin{remark}
+We define $\Lambda_1(T_3)$ to be the sequence made of every other entry of $\Lambda(T_3)$ starting at the second element -- that is, the series made up of the lengths of motifs in $T$ consisting of the digit $1.$ Next, we consider the sequence $S$ which is the $\Lambda_1(T_3)$ sequence without any entries other than $6$ or $8.$ In this sequence, $6$ and $8$ alternate until the location corresponding to the motif starting at entry $87384 \simeq 2^{18}/3$ in $T,$ when two entries of $6$ in a row occur. Referring to such a violation of the alternation of $6$ and $8$ as an \emph{anomaly}, we observed that the frequency of anomalies slowly increases for the first $10^9$ digits but never goes above $0.03\%$ of the total.
+\end{remark}
+
+\begin{remark}
+The frequency of the value 3 in $\Lambda{_1(T_3)}$ and $\Lambda{_0(T_3)}$ is approximately uniform across the whole function, starting at an arbitrary value leveling out to 0.33 approximately after 10,000 in T.
+\end{remark}
+
+\includegraphics[scale=0.4]{lambda_ratio_from_data1_ones_100}
+\includegraphics[scale=0.4]{lambda_ratio_from_data1_ones_10000}
 
 \begin{thebibliography}{9}
 
